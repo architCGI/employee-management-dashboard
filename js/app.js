@@ -87,6 +87,38 @@ function formatSalary(salary) {
 	return "₹" + Number(salary).toLocaleString("en-IN");
 }
 
+// Returns the total number of employees.
+function getTotalEmployees() {
+	return employees.length;
+}
+
+// Returns the combined salary of all employees.
+function getTotalSalary() {
+	return employees.reduce(function (total, employee) {
+		return total + employee.salary;
+	}, 0);
+}
+
+// Returns the average salary across all employees.
+function getAverageSalary() {
+	const totalEmployees = getTotalEmployees();
+
+	if (totalEmployees === 0) {
+		return 0;
+	}
+
+	return getTotalSalary() / totalEmployees;
+}
+
+// Returns the number of unique departments.
+function getDepartmentCount() {
+	const departments = employees.map(function (employee) {
+		return employee.department;
+	});
+
+	return new Set(departments).size;
+}
+
 // Creates a single employee table row.
 function createEmployeeRow(employee, index) {
 	return `
@@ -118,8 +150,17 @@ function renderEmployees() {
 	$("#employeeTableBody").html(rows);
 }
 
+// Updates all dashboard summary cards.
+function updateDashboard() {
+	$("#totalEmployees").text(getTotalEmployees());
+	$("#totalSalary").text(formatSalary(getTotalSalary()));
+	$("#avgSalary").text(formatSalary(getAverageSalary()));
+	$("#departmentCount").text(getDepartmentCount());
+}
 
-// Initializes the employee table when the page is ready.
+
+// Initializes the dashboard when the page is ready.
 $(document).ready(function () {
 	renderEmployees();
+	updateDashboard();
 });
