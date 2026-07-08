@@ -12,113 +12,130 @@
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="bg-body-tertiary">
-    <div class="container-fluid py-4 py-lg-5">
-      <div class="container">
-        <header class="mb-4 mb-lg-5">
-          <div class="card border-0 shadow-sm overflow-hidden">
-            <div class="card-body p-4 p-lg-5 bg-white">
-              <div class="row align-items-center g-4">
-                <div class="col-12 col-lg-8">
-                  <span
-                    class="badge rounded-pill text-bg-primary mb-3 px-3 py-2"
-                  >
-                    Admin Dashboard
-                  </span>
-                  <h1 class="display-6 fw-bold mb-2">
-                    Employee Management Dashboard
-                  </h1>
-                  <p class="lead text-muted mb-0">
-                    Manage employees, salaries, and departments.
-                  </p>
-                </div>
-                <div class="col-12 col-lg-4">
-                  <div class="bg-light rounded-4 p-3 p-lg-4 border">
-                    <p class="text-muted text-uppercase small fw-semibold mb-2">
-                      Search Employees
-                    </p>
-                    <label for="searchInput" class="form-label visually-hidden">
-                      Search employees
-                    </label>
-                    <input
-                      type="search"
-                      class="form-control form-control-lg"
-                      id="searchInput"
-                      placeholder="Search by name, email, or department"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <body>
+    <div class="container-fluid dashboard-shell py-3 py-lg-4">
+      <div class="container-xxl">
+        <header class="dashboard-header mb-3">
+          <h1 class="h4 mb-1 fw-bold">Employee Management Dashboard</h1>
+          <p class="text-muted mb-0">
+            Manage employees, salaries, and departments
+          </p>
         </header>
 
-        <section
-          class="row g-3 mb-4 mb-lg-5"
-          aria-label="Dashboard summary cards"
-        >
+        <section class="row g-3 mb-3" aria-label="Dashboard summary cards">
           <div class="col-12 col-sm-6 col-xl-3">
-            <article class="card border-0 shadow-sm h-100">
-              <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-semibold mb-2">
-                  Total Employees
-                </p>
-                <h2 class="display-6 fw-bold mb-0" id="totalEmployees">0</h2>
+            <article class="card app-card metric-card border-0 shadow-sm h-100">
+              <div class="card-body p-3">
+                <div class="stat-head">
+                  <span class="stat-icon stat-blue">EMP</span>
+                  <div>
+                    <p class="metric-title mb-0">Total Employees</p>
+                    <h2 class="metric-value mb-0" id="totalEmployees">0</h2>
+                  </div>
+                </div>
+                <p class="metric-subtitle mb-0">+12 this month</p>
               </div>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-3">
-            <article class="card border-0 shadow-sm h-100">
-              <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-semibold mb-2">
-                  Total Salary
-                </p>
-                <h2 class="display-6 fw-bold mb-0" id="totalSalary">$0</h2>
+            <article class="card app-card metric-card border-0 shadow-sm h-100">
+              <div class="card-body p-3">
+                <div class="stat-head">
+                  <span class="stat-icon stat-green">SAL</span>
+                  <div>
+                    <p class="metric-title mb-0">Total Salary</p>
+                    <h2 class="metric-value mb-0" id="totalSalary">$0</h2>
+                  </div>
+                </div>
+                <p class="metric-subtitle mb-0">+8.5% this month</p>
               </div>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-3">
-            <article class="card border-0 shadow-sm h-100">
-              <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-semibold mb-2">
-                  Average Salary
-                </p>
-                <h2 class="display-6 fw-bold mb-0" id="avgSalary">$0</h2>
+            <article class="card app-card metric-card border-0 shadow-sm h-100">
+              <div class="card-body p-3">
+                <div class="stat-head">
+                  <span class="stat-icon stat-orange">AVG</span>
+                  <div>
+                    <p class="metric-title mb-0">Average Salary</p>
+                    <h2 class="metric-value mb-0" id="avgSalary">$0</h2>
+                  </div>
+                </div>
+                <p class="metric-subtitle mb-0">+4.3% this month</p>
               </div>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-3">
-            <article class="card border-0 shadow-sm h-100">
-              <div class="card-body p-4">
-                <p class="text-muted text-uppercase small fw-semibold mb-2">
-                  Departments
-                </p>
-                <h2 class="display-6 fw-bold mb-0" id="departmentCount">0</h2>
+            <article class="card app-card metric-card border-0 shadow-sm h-100">
+              <div class="card-body p-3">
+                <div class="stat-head">
+                  <span class="stat-icon stat-purple">DEP</span>
+                  <div>
+                    <p class="metric-title mb-0">Departments</p>
+                    <h2 class="metric-value mb-0" id="departmentCount">0</h2>
+                  </div>
+                </div>
+                <p class="metric-subtitle mb-0">Active departments</p>
               </div>
             </article>
           </div>
         </section>
 
-        <main class="row g-4 align-items-start">
+        <main class="row g-3 align-items-start">
           <section class="col-12 col-xl-8" aria-labelledby="employeeListTitle">
-            <div class="card border-0 shadow-sm h-100">
-              <div class="card-header bg-white border-0 p-4 pb-0">
+            <div class="card app-card border-0 shadow-sm h-100">
+              <div class="card-header bg-white border-0 p-3">
                 <div
-                  class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3"
+                  class="d-flex align-items-center justify-content-between gap-2"
                 >
-                  <div>
-                    <h2 class="h3 mb-1" id="employeeListTitle">
-                      Employee List
-                    </h2>
-                    <p class="text-muted mb-0">
-                      Review employee records and upcoming action controls.
-                    </p>
-                  </div>
+                  <h2 class="h5 mb-0" id="employeeListTitle">Employee List</h2>
                 </div>
               </div>
-              <div class="card-body p-4">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
+              <div class="card-body p-3 pt-0">
+                <div class="row g-2 align-items-center mb-3 table-toolbar">
+                  <div class="col-12 col-md-5">
+                    <label for="searchInput" class="form-label visually-hidden"
+                      >Search employees</label
+                    >
+                    <div class="input-group input-group-sm search-group">
+                      <span class="input-group-text">Search</span>
+                      <input
+                        type="search"
+                        class="form-control"
+                        id="searchInput"
+                        placeholder="Search employees..."
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <select
+                      class="form-select form-select-sm"
+                      aria-label="Department filter"
+                    >
+                      <option selected>All Departments</option>
+                      <option>IT</option>
+                      <option>HR</option>
+                      <option>Finance</option>
+                      <option>Marketing</option>
+                      <option>Sales</option>
+                    </select>
+                  </div>
+                  <div
+                    class="col-12 col-md-4 d-flex gap-2 justify-content-md-end"
+                  >
+                    <button type="button" class="btn btn-sm btn-primary">
+                      Export CSV
+                    </button>
+                    <button type="button" class="btn btn-sm btn-light border">
+                      Columns
+                    </button>
+                  </div>
+                </div>
+
+                <div class="table-responsive table-area">
+                  <table
+                    class="table table-hover align-middle mb-0 table-sticky"
+                  >
                     <thead class="table-light">
                       <tr>
                         <th scope="col">#</th>
@@ -133,27 +150,47 @@
                     <tbody id="employeeTableBody"></tbody>
                   </table>
                 </div>
+
+                <div
+                  class="table-footer d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mt-3"
+                >
+                  <p class="mb-0 text-muted small" id="tableEntrySummary">
+                    Showing 0 to 0 of 0 entries
+                  </p>
+                  <nav aria-label="Employee table pagination">
+                    <ul class="pagination pagination-sm mb-0">
+                      <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                      </li>
+                      <li class="page-item active">
+                        <span class="page-link">1</span>
+                      </li>
+                      <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </section>
 
           <section class="col-12 col-xl-4" aria-labelledby="employeeFormTitle">
-            <div class="card border-0 shadow-sm">
-              <div class="card-header bg-white border-0 p-4 pb-0">
-                <h2 class="h3 mb-1" id="employeeFormTitle">Employee Form</h2>
-                <p class="text-muted mb-0">
-                  Add a new employee record to the dashboard.
-                </p>
+            <div class="card app-card border-0 shadow-sm">
+              <div class="card-header bg-white border-0 p-3">
+                <h2 class="h5 mb-0" id="employeeFormTitle">Add New Employee</h2>
               </div>
-              <div class="card-body p-4">
+              <div class="card-body p-3">
                 <form id="employeeForm">
                   <div class="mb-3">
-                    <label for="employeeName" class="form-label">Name</label>
+                    <label for="employeeName" class="form-label"
+                      >Full Name</label
+                    >
                     <input
                       type="text"
                       class="form-control"
                       id="employeeName"
-                      placeholder="Enter employee name"
+                      placeholder="Enter full name"
                     />
                   </div>
 
@@ -163,7 +200,7 @@
                       type="email"
                       class="form-control"
                       id="employeeEmail"
-                      placeholder="Enter employee email"
+                      placeholder="Enter email address"
                     />
                   </div>
 
@@ -172,7 +209,7 @@
                       Department
                     </label>
                     <select class="form-select" id="employeeDepartment">
-                      <option value="" selected>Select department</option>
+                      <option value="" selected>Select Department</option>
                       <option value="IT">IT</option>
                       <option value="HR">HR</option>
                       <option value="Finance">Finance</option>
@@ -186,7 +223,7 @@
                       >Salary</label
                     >
                     <div class="input-group">
-                      <span class="input-group-text">$</span>
+                      <span class="input-group-text">₹</span>
                       <input
                         type="number"
                         class="form-control"
@@ -200,16 +237,28 @@
                     <label for="joiningDate" class="form-label"
                       >Joining Date</label
                     >
-                    <input type="date" class="form-control" id="joiningDate" />
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="joiningDate"
+                      placeholder="dd-mm-yyyy"
+                    />
                   </div>
 
-                  <div class="d-grid">
+                  <div class="d-flex gap-2">
                     <button
                       type="submit"
-                      class="btn btn-primary btn-lg"
+                      class="btn btn-success flex-grow-1"
                       id="saveEmployeeBtn"
                     >
                       Save Employee
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-light border"
+                      id="resetFormBtn"
+                    >
+                      Reset
                     </button>
                   </div>
                 </form>
@@ -217,6 +266,62 @@
             </div>
           </section>
         </main>
+
+        <section
+          class="row g-3 mt-1 pb-2"
+          aria-label="Insights and activity cards"
+        >
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="card app-card border-0 shadow-sm h-100">
+              <div class="card-header bg-white border-0 p-3 pb-0">
+                <h3 class="h5 mb-0">Recent Activities</h3>
+              </div>
+              <div class="card-body p-3 pt-2">
+                <ul
+                  class="list-group list-group-flush"
+                  id="recentActivitiesList"
+                ></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="card app-card border-0 shadow-sm h-100">
+              <div class="card-header bg-white border-0 p-3 pb-0">
+                <h3 class="h5 mb-0">Department Distribution</h3>
+              </div>
+              <div class="card-body p-3 pt-2">
+                <div class="row g-3 align-items-center">
+                  <div class="col-12 col-sm-6">
+                    <div class="chart-wrap">
+                      <canvas id="departmentChart"></canvas>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <ul
+                      class="dept-legend list-unstyled mb-0"
+                      id="departmentLegend"
+                    ></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-12 col-xl-4">
+            <div class="card app-card border-0 shadow-sm h-100">
+              <div class="card-header bg-white border-0 p-3 pb-0">
+                <h3 class="h5 mb-0">Top Earners</h3>
+              </div>
+              <div class="card-body p-3 pt-2">
+                <ul
+                  class="list-unstyled mb-0 top-earners"
+                  id="topEarnersList"
+                ></ul>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 
@@ -231,6 +336,13 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/employee.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/search.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
