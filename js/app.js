@@ -1,5 +1,5 @@
 // Sample employee data used to populate the dashboard table.
-const employees = [
+const sampleEmployees = [
 	{
 		id: 1,
 		name: "John Doe",
@@ -82,6 +82,9 @@ const employees = [
 	},
 ];
 
+// Employees acts as the single source of truth for the UI.
+let employees = [...sampleEmployees];
+
 // Formats salary values for display in Indian Rupees.
 function formatSalary(salary) {
 	return "₹" + Number(salary).toLocaleString("en-IN");
@@ -117,6 +120,19 @@ function getDepartmentCount() {
 	});
 
 	return new Set(departments).size;
+}
+
+// Saves employees to Local Storage.
+// Local Storage can store strings only, so JSON.stringify() converts the array into a storable string.
+function saveEmployees() {
+	localStorage.setItem("employees", JSON.stringify(employees));
+}
+
+// Loads employees from Local Storage.
+// JSON.parse() converts the stored JSON string back into a JavaScript array.
+// If no data exists, an empty array is returned.
+function loadEmployees() {
+	return JSON.parse(localStorage.getItem("employees")) || [];
 }
 
 // Creates a single employee table row.
@@ -156,6 +172,12 @@ function updateDashboard() {
 	$("#totalSalary").text(formatSalary(getTotalSalary()));
 	$("#avgSalary").text(formatSalary(getAverageSalary()));
 	$("#departmentCount").text(getDepartmentCount());
+}
+
+// Refreshes all employee-driven UI sections.
+function refreshUI() {
+	renderEmployees();
+	updateDashboard();
 }
 
 // Validates the employee form fields before creating a new record.
@@ -220,8 +242,8 @@ function addEmployee() {
 	const employee = createEmployeeObject();
 
 	employees.push(employee);
-	renderEmployees();
-	updateDashboard();
+	saveEmployees();
+	refreshUI();
 	resetForm();
 }
 
@@ -233,6 +255,13 @@ $(document).ready(function () {
 		addEmployee();
 	});
 
-	renderEmployees();
-	updateDashboard();
+	const storedEmployees = loadEmployees();
+
+	if (storedEmployees.length > 0) {
+		employees = storedEmployees;
+	} else {
+		saveEmployees();
+	}
+
+	refreshUI();
 });
