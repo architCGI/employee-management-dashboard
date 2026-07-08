@@ -247,12 +247,35 @@ function addEmployee() {
 	resetForm();
 }
 
+// Removes one employee from the source array, then persists and refreshes the UI.
+function deleteEmployee(id) {
+	employees = employees.filter(function (employee) {
+		return employee.id !== id;
+	});
+
+	saveEmployees();
+	refreshUI();
+}
+
 
 // Initializes the dashboard when the page is ready.
 $(document).ready(function () {
 	$("#employeeForm").on("submit", function (e) {
 		e.preventDefault();
 		addEmployee();
+	});
+
+	// Event delegation is needed because table rows are rendered dynamically.
+	// Direct click handlers on delete buttons will not stay reliable when rows are recreated after each render.
+	$("#employeeTableBody").on("click", ".delete-btn", function () {
+		const employeeId = Number($(this).data("id"));
+		const shouldDelete = confirm("Are you sure you want to delete this employee?");
+
+		if (!shouldDelete) {
+			return;
+		}
+
+		deleteEmployee(employeeId);
 	});
 
 	const storedEmployees = loadEmployees();
