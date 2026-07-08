@@ -84,6 +84,7 @@ const sampleEmployees = [
 
 // Employees acts as the single source of truth for the UI.
 let employees = [...sampleEmployees];
+let editingEmployeeId = null;
 
 // Formats salary values for display in Indian Rupees.
 function formatSalary(salary) {
@@ -231,6 +232,8 @@ function createEmployeeObject() {
 // Clears the employee form after a successful save.
 function resetForm() {
 	$("#employeeForm")[0].reset();
+	$("#saveEmployeeBtn").text("Save Employee");
+	editingEmployeeId = null;
 }
 
 // Adds a new employee and refreshes the table and dashboard.
@@ -242,6 +245,51 @@ function addEmployee() {
 	const employee = createEmployeeObject();
 
 	employees.push(employee);
+	saveEmployees();
+	refreshUI();
+	resetForm();
+}
+
+// Loads one employee into the form so the record can be updated.
+function loadEmployeeForEdit(id) {
+	const employee = employees.find(function (currentEmployee) {
+		return currentEmployee.id === id;
+	});
+
+	if (!employee) {
+		return;
+	}
+
+	$("#employeeName").val(employee.name);
+	$("#employeeEmail").val(employee.email);
+	$("#employeeDepartment").val(employee.department);
+	$("#employeeSalary").val(employee.salary);
+	$("#joiningDate").val(employee.joiningDate);
+
+	editingEmployeeId = id;
+	$("#saveEmployeeBtn").text("Update Employee");
+}
+
+// Updates the selected employee record with the latest form values.
+function updateEmployee() {
+	if (!validateForm()) {
+		return;
+	}
+
+	const employee = employees.find(function (currentEmployee) {
+		return currentEmployee.id === editingEmployeeId;
+	});
+
+	if (!employee) {
+		return;
+	}
+
+	employee.name = $("#employeeName").val().trim();
+	employee.email = $("#employeeEmail").val().trim();
+	employee.department = $("#employeeDepartment").val().trim();
+	employee.salary = Number($("#employeeSalary").val().trim());
+	employee.joiningDate = $("#joiningDate").val().trim();
+
 	saveEmployees();
 	refreshUI();
 	resetForm();
@@ -262,7 +310,19 @@ function deleteEmployee(id) {
 $(document).ready(function () {
 	$("#employeeForm").on("submit", function (e) {
 		e.preventDefault();
-		addEmployee();
+
+		if (editingEmployeeId !== null) {
+			updateEmployee();
+		} else {
+			addEmployee();
+		}
+	});
+
+	// Event delegation is needed because edit buttons are recreated whenever the table rerenders.
+	// Direct click handlers on dynamic rows will not reliably stay attached after new HTML replaces the old rows.
+	$("#employeeTableBody").on("click", ".edit-btn", function () {
+		const employeeId = Number($(this).data("id"));
+		loadEmployeeForEdit(employeeId);
 	});
 
 	// Event delegation is needed because table rows are rendered dynamically.
