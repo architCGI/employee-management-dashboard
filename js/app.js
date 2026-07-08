@@ -136,6 +136,33 @@ function loadEmployees() {
 	return JSON.parse(localStorage.getItem("employees")) || [];
 }
 
+// Filters employees by name, email, or department using a case-insensitive search term.
+function searchEmployees(searchTerm) {
+	const normalizedSearchTerm = searchTerm.toLowerCase();
+
+	return employees.filter(function (employee) {
+		return (
+			employee.name.toLowerCase().includes(normalizedSearchTerm) ||
+			employee.email.toLowerCase().includes(normalizedSearchTerm) ||
+			employee.department.toLowerCase().includes(normalizedSearchTerm)
+		);
+	});
+}
+
+// Debounce delays execution until typing stops, which avoids running search logic on every single keystroke.
+// A normal search runs immediately for each input event, while a debounced search waits briefly and reduces repeated work.
+function debounce(callback, delay) {
+	let timer;
+
+	return function (...args) {
+		clearTimeout(timer);
+
+		timer = setTimeout(() => {
+			callback.apply(this, args);
+		}, delay);
+	};
+}
+
 // Creates a single employee table row.
 function createEmployeeRow(employee, index) {
 	return `
@@ -160,9 +187,9 @@ function createEmployeeRow(employee, index) {
 	`;
 }
 
-// Renders all employee records inside the table body.
-function renderEmployees() {
-	const rows = employees.map(createEmployeeRow).join("");
+// Renders the provided employee list inside the table body.
+function renderEmployees(employeeList = employees) {
+	const rows = employeeList.map(createEmployeeRow).join("");
 
 	$("#employeeTableBody").html(rows);
 }
@@ -177,7 +204,10 @@ function updateDashboard() {
 
 // Refreshes all employee-driven UI sections.
 function refreshUI() {
-	renderEmployees();
+	const searchTerm = $("#searchInput").val().trim();
+	const employeeList = searchTerm ? searchEmployees(searchTerm) : employees;
+
+	renderEmployees(employeeList);
 	updateDashboard();
 }
 
@@ -337,6 +367,21 @@ $(document).ready(function () {
 
 		deleteEmployee(employeeId);
 	});
+
+	$("#searchInput").on(
+		"input",
+		debounce(function () {
+			const searchTerm = $(this).val().trim();
+
+			if (!searchTerm) {
+				renderEmployees(employees);
+				return;
+			}
+
+			const filteredEmployees = searchEmployees(searchTerm);
+			renderEmployees(filteredEmployees);
+		}, 500)
+	);
 
 	const storedEmployees = loadEmployees();
 
