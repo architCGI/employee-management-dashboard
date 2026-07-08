@@ -91,6 +91,26 @@ function formatSalary(salary) {
 	return "₹" + Number(salary).toLocaleString("en-IN");
 }
 
+// Shows a shared success alert so success feedback stays consistent across the app.
+function showSuccessMessage(message) {
+	Swal.fire({
+		icon: "success",
+		title: message,
+		timer: 1500,
+		showConfirmButton: false,
+	});
+}
+
+// Shows a shared error alert so validation and error feedback use one configuration.
+function showErrorMessage(message) {
+	Swal.fire({
+		icon: "error",
+		title: message,
+		timer: 1500,
+		showConfirmButton: false,
+	});
+}
+
 // Returns the total number of employees.
 function getTotalEmployees() {
 	return employees.length;
@@ -255,27 +275,27 @@ function validateForm() {
 	const joiningDate = $("#joiningDate").val().trim();
 
 	if (!name) {
-		alert("Name is required");
+		showErrorMessage("Name is required");
 		return false;
 	}
 
 	if (!email) {
-		alert("Email is required");
+		showErrorMessage("Email is required");
 		return false;
 	}
 
 	if (!department) {
-		alert("Department is required");
+		showErrorMessage("Department is required");
 		return false;
 	}
 
 	if (!salary) {
-		alert("Salary is required");
+		showErrorMessage("Salary is required");
 		return false;
 	}
 
 	if (!joiningDate) {
-		alert("Joining Date is required");
+		showErrorMessage("Joining Date is required");
 		return false;
 	}
 
@@ -313,6 +333,7 @@ function addEmployee() {
 	saveEmployees();
 	refreshUI();
 	resetForm();
+	showSuccessMessage("Employee added successfully");
 }
 
 // Loads one employee into the form so the record can be updated.
@@ -358,6 +379,7 @@ function updateEmployee() {
 	saveEmployees();
 	refreshUI();
 	resetForm();
+	showSuccessMessage("Employee updated successfully");
 }
 
 // Removes one employee from the source array, then persists and refreshes the UI.
@@ -368,6 +390,7 @@ function deleteEmployee(id) {
 
 	saveEmployees();
 	refreshUI();
+	showSuccessMessage("Employee deleted successfully");
 }
 
 
@@ -392,11 +415,18 @@ $(document).ready(function () {
 
 	// Event delegation is needed because table rows are rendered dynamically.
 	// Direct click handlers on delete buttons will not stay reliable when rows are recreated after each render.
-	$("#employeeTableBody").on("click", ".delete-btn", function () {
+	$("#employeeTableBody").on("click", ".delete-btn", async function () {
 		const employeeId = Number($(this).data("id"));
-		const shouldDelete = confirm("Are you sure you want to delete this employee?");
+		const result = await Swal.fire({
+			title: "Delete Employee?",
+			text: "This action cannot be undone.",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: "Delete",
+			cancelButtonText: "Cancel",
+		});
 
-		if (!shouldDelete) {
+		if (!result.isConfirmed) {
 			return;
 		}
 
