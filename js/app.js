@@ -158,9 +158,81 @@ function updateDashboard() {
 	$("#departmentCount").text(getDepartmentCount());
 }
 
+// Validates the employee form fields before creating a new record.
+function validateForm() {
+	const name = $("#employeeName").val().trim();
+	const email = $("#employeeEmail").val().trim();
+	const department = $("#employeeDepartment").val().trim();
+	const salary = $("#employeeSalary").val().trim();
+	const joiningDate = $("#joiningDate").val().trim();
+
+	if (!name) {
+		alert("Name is required");
+		return false;
+	}
+
+	if (!email) {
+		alert("Email is required");
+		return false;
+	}
+
+	if (!department) {
+		alert("Department is required");
+		return false;
+	}
+
+	if (!salary) {
+		alert("Salary is required");
+		return false;
+	}
+
+	if (!joiningDate) {
+		alert("Joining Date is required");
+		return false;
+	}
+
+	return true;
+}
+
+// Creates a new employee object from the current form values.
+function createEmployeeObject() {
+	return {
+		id: Date.now(),
+		name: $("#employeeName").val().trim(),
+		email: $("#employeeEmail").val().trim(),
+		department: $("#employeeDepartment").val().trim(),
+		salary: Number($("#employeeSalary").val().trim()),
+		joiningDate: $("#joiningDate").val().trim(),
+	};
+}
+
+// Clears the employee form after a successful save.
+function resetForm() {
+	$("#employeeForm")[0].reset();
+}
+
+// Adds a new employee and refreshes the table and dashboard.
+function addEmployee() {
+	if (!validateForm()) {
+		return;
+	}
+
+	const employee = createEmployeeObject();
+
+	employees.push(employee);
+	renderEmployees();
+	updateDashboard();
+	resetForm();
+}
+
 
 // Initializes the dashboard when the page is ready.
 $(document).ready(function () {
+	$("#employeeForm").on("submit", function (e) {
+		e.preventDefault();
+		addEmployee();
+	});
+
 	renderEmployees();
 	updateDashboard();
 });
