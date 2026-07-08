@@ -125,6 +125,7 @@ function getDepartmentCount() {
 
 // Saves employees to Local Storage.
 // Local Storage can store strings only, so JSON.stringify() converts the array into a storable string.
+// Employee data uses Local Storage because it should survive refreshes and browser restarts.
 function saveEmployees() {
 	localStorage.setItem("employees", JSON.stringify(employees));
 }
@@ -133,7 +134,26 @@ function saveEmployees() {
 // JSON.parse() converts the stored JSON string back into a JavaScript array.
 // If no data exists, an empty array is returned.
 function loadEmployees() {
-	return JSON.parse(localStorage.getItem("employees")) || [];
+	const storedEmployees = JSON.parse(localStorage.getItem("employees")) || [];
+
+	if (storedEmployees.length > 0) {
+		employees = storedEmployees;
+		return;
+	}
+
+	employees = [...sampleEmployees];
+	saveEmployees();
+}
+
+// Saves the last search term in Session Storage.
+// Session Storage is used for temporary UI state because it survives refreshes but is cleared when the tab closes.
+function saveSearchTerm(searchTerm) {
+	sessionStorage.setItem("searchTerm", searchTerm);
+}
+
+// Loads the last search term from Session Storage.
+function loadSearchTerm() {
+	return sessionStorage.getItem("searchTerm") || "";
 }
 
 // Filters employees by name, email, or department using a case-insensitive search term.
@@ -209,6 +229,21 @@ function refreshUI() {
 
 	renderEmployees(employeeList);
 	updateDashboard();
+}
+
+// Restores the last saved search term and reapplies the matching filter.
+function initializeSearch() {
+	const savedSearchTerm = loadSearchTerm();
+
+	$("#searchInput").val(savedSearchTerm);
+
+	if (!savedSearchTerm) {
+		renderEmployees(employees);
+		return;
+	}
+
+	const filteredEmployees = searchEmployees(savedSearchTerm);
+	renderEmployees(filteredEmployees);
 }
 
 // Validates the employee form fields before creating a new record.
@@ -372,6 +407,7 @@ $(document).ready(function () {
 		"input",
 		debounce(function () {
 			const searchTerm = $(this).val().trim();
+			saveSearchTerm(searchTerm);
 
 			if (!searchTerm) {
 				renderEmployees(employees);
@@ -383,13 +419,7 @@ $(document).ready(function () {
 		}, 500)
 	);
 
-	const storedEmployees = loadEmployees();
-
-	if (storedEmployees.length > 0) {
-		employees = storedEmployees;
-	} else {
-		saveEmployees();
-	}
-
+	loadEmployees();
 	refreshUI();
+	initializeSearch();
 });
